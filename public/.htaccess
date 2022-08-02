@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^invalid_referer\.png$ - [L]
+
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http(s)?://(.+\.)?naver\.com [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://(.+\.)?daum\.com [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://(.+\.)?namu\.wiki [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://blog\.lael\.be [NC]
+RewriteRule \.(jpg|jpeg|png|gif|css|js)$ https://img.lael.be/invalid_referer.png [NC,R,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+<Files ~ "\.(png|jpg|jpeg|gif|css|js)$">
+header set my-cache-status "HIT"
+header set cache-control "public, max-age=2678400"
+</Files>
+
+header set my-ray "KR1"
+</IfModule>
